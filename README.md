@@ -119,8 +119,7 @@ Actualitza els URLs en la secció de contacte:
 ## 📞 Suport
 
 Per a dubtes o suggeriments sobre la web:
-- Email: info@celticgirona.cat
-- Telèfon: +34 972 123 456
+- Email: communications.celticgirona.europe@gaa.ie
 
 ## 🍀 Crèdits
 
@@ -131,3 +130,4 @@ Passió, Tradició i Futur
 ---
 
 **Pista Secreta:** 🎮 Prova a escriure "CELTIC" mentre navegues per la pàgina!
+
