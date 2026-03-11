@@ -6,6 +6,7 @@ oʻ<!DOCTYPE html>
     <title>Cèltic Girona | Gaèlic Futbol Club</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
     <!-- Header i Navegació -->
@@ -330,7 +331,51 @@ oʻ<!DOCTYPE html>
 </form>
         </div>
 
-    <iframe src="docs/futbol-gaelic.pdf" width="800" height="600"></iframe>
+
+<canvas id="pdf-render"></canvas>
+
+<br>
+<button onclick="prevPage()">Anterior</button>
+<button onclick="nextPage()">Següent</button>
+
+<script>
+let pdfDoc = null;
+let pageNum = 1;
+
+pdfjsLib.getDocument('document.pdf').promise.then(function(pdfDoc_) {
+    pdfDoc = pdfDoc_;
+    renderPage(pageNum);
+});
+
+function renderPage(num) {
+    pdfDoc.getPage(num).then(function(page) {
+        const canvas = document.getElementById('pdf-render');
+        const ctx = canvas.getContext('2d');
+
+        const viewport = page.getViewport({scale: 1.5});
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        page.render({
+            canvasContext: ctx,
+            viewport: viewport
+        });
+    });
+}
+
+function prevPage() {
+    if (pageNum <= 1) return;
+    pageNum--;
+    renderPage(pageNum);
+}
+
+function nextPage() {
+    if (pageNum >= pdfDoc.numPages) return;
+    pageNum++;
+    renderPage(pageNum);
+}
+</script>
+
     
     
     </section>
@@ -349,6 +394,7 @@ oʻ<!DOCTYPE html>
 </body>
 
 </html>
+
 
 
 
