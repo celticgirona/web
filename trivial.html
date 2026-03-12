@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<title>Trivial Futbol Gaèlic - Cèltic Girona</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:linear-gradient(135deg,#0b6623,#1e8449);
+color:white;
+text-align:center;
+padding:20px;
+}
+
+#quiz-container{
+background:#145a32;
+padding:25px;
+border-radius:12px;
+max-width:650px;
+margin:auto;
+box-shadow:0 0 15px rgba(0,0,0,0.4);
+}
+
+h1{
+margin-bottom:10px;
+}
+
+#progress-bar{
+width:100%;
+background:#0b3d1b;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:20px;
+}
+
+#progress{
+height:15px;
+background:gold;
+width:0%;
+}
+
+.answer{
+display:block;
+width:100%;
+padding:12px;
+margin:8px 0;
+font-size:16px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:white;
+color:black;
+}
+
+.answer:hover{
+background:#ddd;
+}
+
+.correct{
+background:#2ecc71 !important;
+color:white;
+}
+
+.wrong{
+background:#e74c3c !important;
+color:white;
+}
+
+#nextBtn, #restartBtn{
+margin-top:15px;
+padding:10px 20px;
+font-size:16px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:gold;
+}
+
+#result{
+font-size:24px;
+margin-top:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Trivial Futbol Gaèlic 🏐</h1>
+<h2>Cèltic Girona</h2>
+
+<div id="quiz-container">
+
+<div id="progress-bar">
+<div id="progress"></div>
+</div>
+
+<h3 id="question"></h3>
+
+<div id="answers"></div>
+
+<button id="nextBtn" style="display:none;">Següent</button>
+
+<div id="result"></div>
+
+<button id="restartBtn" style="display:none;">Tornar a jugar</button>
+
+</div>
+
+<script>
+
+const questions = [
+
+{
+question:"Quants jugadors té un equip de futbol gaèlic al camp?",
+answers:["11","15","13","9"],
+correct:1
+},
+
+{
+question:"Quants punts val un gol?",
+answers:["1","2","3","4"],
+correct:2
+},
+
+{
+question:"Quants punts val passar la pilota per sobre el travesser?",
+answers:["1","2","3","4"],
+correct:0
+},
+
+{
+question:"De quin país prové el futbol gaèlic?",
+answers:["Irlanda","Escòcia","Anglaterra","Austràlia"],
+correct:0
+},
+
+{
+question:"Com es diu l'organització dels esports gaèlics?",
+answers:["GAA","FIFA","UEFA","IRFU"],
+correct:0
+},
+
+{
+question:"Quina forma té la pilota?",
+answers:["Rodona","Ovalada","Quadrada","Triangular"],
+correct:0
+},
+
+{
+question:"El Cèltic Girona juga principalment a:",
+answers:["Rugbi","Futbol gaèlic","Handbol","Futbol sala"],
+correct:1
+},
+
+{
+question:"En quina ciutat és el Cèltic Girona?",
+answers:["Girona","Barcelona","Vic","Tarragona"],
+correct:0
+},
+
+{
+question:"Quants passos pots fer sense botar la pilota?",
+answers:["4","2","6","8"],
+correct:0
+},
+
+{
+question:"El futbol gaèlic es juga principalment amb:",
+answers:["Peu i mans","Només peu","Només mans","Cap"],
+correct:0
+}
+
+];
+
+let current=0;
+let score=0;
+
+const questionEl=document.getElementById("question");
+const answersEl=document.getElementById("answers");
+const nextBtn=document.getElementById("nextBtn");
+const resultEl=document.getElementById("result");
+const restartBtn=document.getElementById("restartBtn");
+const progress=document.getElementById("progress");
+
+function loadQuestion(){
+
+let q=questions[current];
+
+questionEl.innerText=q.question;
+
+answersEl.innerHTML="";
+
+q.answers.forEach((a,i)=>{
+
+let btn=document.createElement("button");
+btn.innerText=a;
+btn.classList.add("answer");
+
+btn.onclick=()=>selectAnswer(btn,i);
+
+answersEl.appendChild(btn);
+
+});
+
+progress.style.width=((current)/questions.length*100)+"%";
+
+}
+
+function selectAnswer(btn,i){
+
+let q=questions[current];
+let buttons=document.querySelectorAll(".answer");
+
+buttons.forEach((b,index)=>{
+
+b.disabled=true;
+
+if(index===q.correct){
+b.classList.add("correct");
+}
+
+if(index===i && index!==q.correct){
+b.classList.add("wrong");
+}
+
+});
+
+if(i===q.correct){
+score++;
+}
+
+nextBtn.style.display="inline-block";
+
+}
+
+nextBtn.onclick=()=>{
+
+current++;
+
+if(current<questions.length){
+
+loadQuestion();
+nextBtn.style.display="none";
+
+}else{
+
+finishQuiz();
+
+}
+
+};
+
+function finishQuiz(){
+
+progress.style.width="100%";
+
+questionEl.innerText="Trivial acabat!";
+
+answersEl.innerHTML="";
+
+resultEl.innerHTML="Has fet <b>"+score+" / "+questions.length+"</b> punts! ⭐";
+
+restartBtn.style.display="inline-block";
+
+nextBtn.style.display="none";
+
+}
+
+restartBtn.onclick=()=>{
+
+current=0;
+score=0;
+resultEl.innerHTML="";
+restartBtn.style.display="none";
+loadQuestion();
+
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
