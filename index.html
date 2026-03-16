@@ -26,6 +26,7 @@ oʻ<!DOCTYPE html>
                     <li><a href="#qui-som" onclick="navigateTo('qui-som')">Qui Som</a></li>
                     <li><a href="#premsa" onclick="navigateTo('premsa')">Premsa & TV</a></li>
                     <li><a href="#botiga" onclick="navigateTo('botiga')">Botiga</a></li>
+                    <li><a href="#preguntes" onclick="navigateTo('preguntes')">Preguntes</a></li>
                     <li><a href="#contacte" onclick="navigateTo('contacte')">Contacte</a></li>
                 </ul>
             </nav>
@@ -84,7 +85,9 @@ oʻ<!DOCTYPE html>
         </div>
     </section>
 
+    
     <!-- Secció Premsa i Televisió -->
+        </section>
     <section id="premsa" class="section premsa">
         <div class="container">
             <h2>Premsa, Radio i Televisió</h2>      
@@ -238,6 +241,174 @@ oʻ<!DOCTYPE html>
 
             </div>
         </div>
+    </section>
+
+    <!-- Secció Preguntes (Trivial) -->
+    <section id="preguntes" class="section trivial">
+        <div class="container">
+            <h2 style="color:white;">És l'hora de jugar!</h2>
+            <style>
+                #answers {
+                    grid-template-columns: 1fr 1fr;
+                    gap: 28px !important;
+                    margin-top: 32px !important;
+                }
+                .answer {
+                    padding: 36px 24px !important;
+                    font-size: 32px !important;
+                    border-radius: 18px !important;
+                    font-weight: bold;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+                }
+                .answer:hover {
+                    transform: scale(1.09);
+                    box-shadow: 0 6px 32px rgba(0,0,0,0.22);
+                }
+                .trivial-modern-input {
+                    padding: 14px 18px;
+                    border-radius: 8px;
+                    border: none;
+                    font-size: 18px;
+                    margin-bottom: 12px;
+                    background: #fff;
+                    color: #145a32;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                    outline: none;
+                    transition: box-shadow 0.2s;
+                }
+                .trivial-modern-input:focus {
+                    box-shadow: 0 0 0 2px #2ecc71;
+                }
+                .trivial-modern-btn {
+                    padding: 14px 28px;
+                    border-radius: 8px;
+                    border: none;
+                    font-size: 18px;
+                    font-weight: bold;
+                    background: linear-gradient(90deg,#2ecc71,#27ae60);
+                    color: #fff;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+                    cursor: pointer;
+                    margin: 8px 0;
+                    transition: background 0.2s, transform 0.2s;
+                }
+                .trivial-modern-btn:hover {
+                    background: linear-gradient(90deg,#27ae60,#2ecc71);
+                    transform: translateY(-2px) scale(1.04);
+                }
+                .trivial-modern-btn.secondary {
+                    background: linear-gradient(90deg,#f1c40f,#e67e22);
+                    color: #145a32;
+                }
+                .trivial-modern-btn.secondary:hover {
+                    background: linear-gradient(90deg,#e67e22,#f1c40f);
+                }
+            </style>
+            <div id="quiz-container" style="background:#145a32;padding:25px;border-radius:12px;max-width:800px;margin:auto;box-shadow:0 0 20px rgba(0,0,0,0.4);color:white;">
+                <div id="start">
+                    <input id="player" class="trivial-modern-input" placeholder="Nom">
+                    <br>
+                    <button class="trivial-modern-btn" onclick="startGame()">Començar el joc</button>
+                </div>
+                <div id="game" style="display:none">
+                    <div id="progress-bar" style="width:100%;background:#0b3d1b;border-radius:10px;overflow:hidden;margin-bottom:20px;">
+                        <div id="progress" style="height:15px;background:gold;width:0%"></div>
+                    </div>
+                    <div id="timer" style="color:gold;font-size:20px;">⏱ 30</div>
+                    <h2 id="question"></h2>
+                    <div id="answers" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;"></div>
+                    <button id="next" class="trivial-modern-btn secondary" style="display:none">Següent</button>
+                    <div id="result"></div>
+                    <button id="restart" class="trivial-modern-btn" style="display:none">Tornar a jugar</button>
+                    <h3>🏆 Ranking</h3>
+                    <table style="width:100%;margin-top:25px;border-collapse:collapse;">
+                        <thead>
+                            <tr><th style="color:gold;">Jugador</th><th style="color:gold;">Punts</th></tr>
+                        </thead>
+                        <tbody id="ranking"></tbody>
+                    </table>
+                </div>
+            </div>
+            <canvas id="confetti" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;"></canvas>
+        </div>
+        <script>
+        // ...existing code from trivial3.html script...
+        let allQuestions=[
+        {q:"Quants jugadors té cada equip de futbol gaèlic a Irlanda?",a:["11","13","15","17"],c:2},
+        {q:"Quants punts val un gol?",a:["1","2","3","4"],c:2},
+        {q:"Quants punts val passar el travesser des de més 40 metres?",a:["1","2","3","4"],c:1},
+        {q:"Quin moviment és portar la pilota al peu?",a:["Solo","Dribble","Bounce","Hand pass"],c:0},
+        {q:"Quina és la organització que gestiona els esports gaèlics?",a:["FIFA","UEFA","GAA","IRFU"],c:2},
+        {q:"Origen del futbol gaèlic?",a:["Escòcia","Irlanda","Anglaterra","Austràlia"],c:1},
+        {q:"Quin any es va reconèixer el Cèltic Girona per la GGE (Gaelic Games Europe)?",a:["2023","2024","2025","2026"],c:2},
+        {q:"Quants passos es poden fer sense botar?",a:["4","6","8","10"],c:0},
+        {q:"Com es diu xutar deixant caure la pilota?",a:["Drop kick","Solo","Hand pass","Toe kick"],c:0},
+        {q:"Mida del camp de futbol gaèlic?",a:["Igual futbol","Una mica més gran","Molt més petit","Sala"],c:1},
+        {q:"Equip amb més All-Ireland?",a:["Kerry","Dublin","Mayo","Cork"],c:1},
+        {q:"Pilota similar a quin esport?",a:["Rugbi","Futbol","Handbol","Bàsquet"],c:1},
+        {q:"De quin color és la primera samarreta del Cèltic Girona?",a:["Verd","Vermell","Blau","Groc"],c:0},
+        {q:"Quin país va inventar el futbol gaèlic?",a:["Irlanda","Escòcia","Anglaterra","França"],c:0},
+        {q:"Quants equips cde futbol gaèlic hi ha a Catalunya?",a:["1","2","3","4"],c:2},
+        {q:"Quina part del cos es pot utilitzar per passar la pilota?",a:["Només mans","Només peus","Mans i peus","Només cap"],c:2},
+        {q:"Quin és el nom de la federació europea de futbol gaèlic?",a:["UEFA","GGE","FIFA","IRFU"],c:1},
+        {q:"Quants punts val un punt per sobre del travesser?",a:["1","2","3","depén"],c:3},
+        {q:"On juga els partits el Cèltic Girona?",a:["Banyoles","Girona","Olot","Figueres"],c:2},
+        {q:"Quin és el màxim nombre de jugadors en un equip de futbol gaèlic?",a:["15","18","11","13"],c:0}
+        ];
+        let questions=[];
+        let current=0;
+        let score=0;
+        let timer;
+        let time=20;
+        let player="";
+        function shuffle(arr){return arr.sort(()=>Math.random()-0.5);}
+        function startGame(){player=document.getElementById("player").value||"Jugador";questions=shuffle([...allQuestions]).slice(0,10);document.getElementById("start").style.display="none";document.getElementById("game").style.display="block";loadQ();loadRanking();}
+        function loadQ(){
+            clearInterval(timer);
+            time=20;
+            document.getElementById("timer").innerText="⏱ "+time;
+            timer=setInterval(()=>{
+                time--;
+                document.getElementById("timer").innerText="⏱ "+time;
+                if(time<=0){
+                    clearInterval(timer);
+                    answer(-1);
+                }
+            },1000);
+            let q=questions[current];
+            document.getElementById("question").innerText=q.q;
+            let answers=document.getElementById("answers");
+            answers.innerHTML="";
+            q.a.forEach((txt,i)=>{
+                let b=document.createElement("button");
+                b.innerText=txt;
+                b.className="answer";
+                b.onclick=()=>answer(i);
+                answers.appendChild(b);
+            });
+            document.getElementById("progress").style.width=(current/10*100)+"%";
+        }
+        function answer(i){clearInterval(timer);let q=questions[current];let btns=document.querySelectorAll(".answer");btns.forEach((b,idx)=>{b.disabled=true;if(idx===q.c) b.style.outline="4px solid white";if(idx===i && idx!==q.c) b.style.opacity="0.4";});if(i===q.c) score++;document.getElementById("next").style.display="inline-block";}
+        document.getElementById("next").onclick=()=>{current++;if(current<questions.length){loadQ();document.getElementById("next").style.display="none";}else finish();}
+        function medal(){if(score==10) return "🥇 Or";if(score>=7) return "🥈 Plata";if(score>=5) return "🥉 Bronze";return "👍";}
+        function finish(){document.getElementById("question").innerText="Quiz acabat!";document.getElementById("answers").innerHTML="";document.getElementById("result").innerHTML = `<span style='font-size:38px;color:#fff;font-weight:bold;text-shadow:0 2px 12px #145a32;'>${player} ha fet ${score}/10 punts ${medal()}</span>`;
+        saveScore();
+        loadRanking();
+        if(score==10) confetti();
+        document.getElementById("restart").style.display="inline-block";
+        }
+        function saveScore(){let r=JSON.parse(localStorage.getItem("ranking"))||[];r.push({n:player,s:score});r.sort((a,b)=>b.s-a.s);r=r.slice(0,10);localStorage.setItem("ranking",JSON.stringify(r));}
+        function loadRanking(){let r=JSON.parse(localStorage.getItem("ranking"))||[];
+        let html="";
+        r.forEach(p=>{
+          html += `<tr><td style='font-size:28px;color:#fff;font-weight:bold;'>${p.n}</td><td style='font-size:22px;color:#ffd700;'>${p.s}</td></tr>`;
+        });
+        document.getElementById("ranking").innerHTML=html;
+        }
+        function confetti(){let canvas=document.getElementById("confetti");let ctx=canvas.getContext("2d");canvas.width=window.innerWidth;canvas.height=window.innerHeight;for(let i=0;i<150;i++){ctx.fillStyle=["gold","green","white"][Math.floor(Math.random()*3)];ctx.fillRect(Math.random()*canvas.width,Math.random()*canvas.height,5,10);}}
+        document.getElementById("restart").onclick=()=>location.reload();
+        </script>
     </section>
 
     <!-- Secció Botiga -->
