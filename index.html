@@ -320,13 +320,18 @@ oʻ<!DOCTYPE html>
                     <div id="timer" style="color:gold;font-size:20px;">⏱ 30</div>
                     <h2 id="question"></h2>
                     <div id="answers" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px;"></div>
-                    <button id="next" class="trivial-modern-btn secondary" style="display:none">Següent</button>
+                    <div style="width:100%;display:flex;justify-content:center;margin-top:32px;margin-bottom:8px;">
+                        <button id="next" class="trivial-modern-btn secondary" style="display:none;min-width:180px;">Següent</button>
+                    </div>
                     <div id="result"></div>
                     <button id="restart" class="trivial-modern-btn" style="display:none">Tornar a jugar</button>
                     <h3>🏆 Ranking</h3>
                     <table style="width:100%;margin-top:25px;border-collapse:collapse;">
                         <thead>
-                            <tr><th style="color:gold;">Jugador</th><th style="color:gold;">Punts</th></tr>
+                            <tr>
+                                <th style="color:gold;text-align:center;font-size:18px;font-weight:bold;">Jugador</th>
+                                <th style="color:gold;text-align:center;font-size:18px;font-weight:bold;">Punts</th>
+                            </tr>
                         </thead>
                         <tbody id="ranking"></tbody>
                     </table>
@@ -342,7 +347,7 @@ oʻ<!DOCTYPE html>
         {q:"Quants punts val sobrepassar el travesser des de més 40 metres?",a:["1","2","3","4"],c:1},
         {q:"Quin moviment és portar la pilota al peu?",a:["Solo","Dribble","Bounce","Hand pass"],c:0},
         {q:"Quina és la organització que gestiona els esports gaèlics?",a:["FIFA","UEFA","GAA","IRFU"],c:2},
-        {q:"Quina és la capacitat de l'estadi Croke Park, on es juguen les finals de futbol gaèlic a Irlanda?",a:["82300","99354","73504","79999"],c:0},
+        {q:"Quina és la capacitat de l'estadi Croke Park, on es juguen les finals de futbol gaèlic a Irlanda?",a:["82.300","99.354","73.504","79.999"],c:0},
         {q:"Quin any es va reconèixer el Cèltic Girona per la GGE?",a:["2023","2024","2025","2026"],c:2},
         {q:"Quants passos es poden fer sense botar?",a:["4","6","8","10"],c:0},
         {q:"Com es diu xutar deixant caure la pilota?",a:["Drop kick","Solo","Hand pass","Toe kick"],c:0},
@@ -402,11 +407,11 @@ oʻ<!DOCTYPE html>
         }
         function saveScore(){let r=JSON.parse(localStorage.getItem("ranking"))||[];r.push({n:player,s:score});r.sort((a,b)=>b.s-a.s);r=r.slice(0,10);localStorage.setItem("ranking",JSON.stringify(r));}
         function loadRanking(){let r=JSON.parse(localStorage.getItem("ranking"))||[];
-        let html="";
-        r.slice(0,3).forEach(p=>{
-          html += `<tr><td style='font-size:28px;color:#fff;font-weight:bold;'>${p.n}</td><td style='font-size:22px;color:#ffd700;'>${p.s}</td></tr>`;
-        });
-        document.getElementById("ranking").innerHTML=html;
+                let html="";
+                r.slice(0,3).forEach(p=>{
+                    html += `<tr><td style='font-size:15px;color:#fff;font-weight:normal;text-align:center;'>${p.n}</td><td style='font-size:15px;color:#ffd700;font-weight:normal;text-align:center;'>${p.s}</td></tr>`;
+                });
+                document.getElementById("ranking").innerHTML=html;
         }
         function confetti(){let canvas=document.getElementById("confetti");let ctx=canvas.getContext("2d");canvas.width=window.innerWidth;canvas.height=window.innerHeight;for(let i=0;i<150;i++){ctx.fillStyle=["gold","green","white"][Math.floor(Math.random()*3)];ctx.fillRect(Math.random()*canvas.width,Math.random()*canvas.height,5,10);}}
         document.getElementById("restart").onclick=()=>location.reload();
