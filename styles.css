@@ -663,6 +663,7 @@ body::before {
     object-fit: contain; /* mostra la imatge completa */
     object-position: center;
     display: block;
+    margin: 0 auto;
 }
 
 
