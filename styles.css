@@ -644,25 +644,27 @@ body::before {
 
 .product-image {
     width: 100%;
-    height: 225px; /* increased from 150px to 225px (1.5×) */
-    background: #ffffff; /* hide green edges by using white background */
+    aspect-ratio: 4 / 3; /* o 1 / 1 si la vols més quadrada */
+    background: #ffffff;
     border-radius: 10px;
     margin-bottom: 15px;
     animation: pulse 2s ease-in-out infinite;
-    overflow: hidden; /* ensure inner img doesn't spill */
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 12px; /* espai interior perquè no toqui vores */
+    box-sizing: border-box;
 }
 
 .product-image img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* mostra la imatge completa */
+    object-position: center;
     display: block;
 }
+
 
 /* scale the entire square when hovered so it grows with the image */
 .product-image {
