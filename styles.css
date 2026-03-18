@@ -653,7 +653,7 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px; /* espai interior perquè no toqui vores */
+    padding: 5px; /* espai interior perquè no toqui vores */
     box-sizing: border-box;
 }
 
