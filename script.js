@@ -8,11 +8,15 @@ hamburger.addEventListener('click', () => {
 
 // Tancar menú quan es fa clic en un link
 document.querySelectorAll('.nav-list a').forEach(link => {
-    link.addEventListener('click', function(e) {
+link.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+
+    // Només interceptem si és un anchor intern real
+    if (href.startsWith('#')) {
         e.preventDefault();
-        const section = this.getAttribute('href').substring(1);
+        const section = href.substring(1);
         navigateTo(section);
-    });
+    }
 });
 
 // Filtres de premsa
