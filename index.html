@@ -591,7 +591,23 @@
         function answer(i){clearInterval(timer);let q=questions[current];let btns=document.querySelectorAll(".answer");btns.forEach((b,idx)=>{b.disabled=true;if(idx===q.c) b.style.outline="4px solid white";if(idx===i && idx!==q.c) b.style.opacity="0.4";});if(i===q.c) score++;document.getElementById("next").style.display="inline-block";}
         document.getElementById("next").onclick=()=>{current++;if(current<questions.length){loadQ();document.getElementById("next").style.display="none";}else finish();}
         function medal(){if(score==10) return "🥇 Or";if(score>=7) return "🥈 Plata";if(score>=5) return "🥉 Bronze";return "👍";}
-        function finish(){document.getElementById("question").innerText="Quiz acabat!";document.getElementById("answers").innerHTML="";document.getElementById("result").innerHTML = `<span style='font-size:38px;color:#fff;font-weight:bold;text-shadow:0 2px 12px #145a32;'>${player} ha fet ${score}/10 punts ${medal()}</span>`;
+        function getFunnyComment(){
+            const comments = {
+                10: ["🌟 ¡Ets un CAMPIÓ del futbol gaèlic!","🍀 Has demostrat que ets un gaèlic EXPERT!","🏆 ¡Perfecte! Mereixries jugar al Celtic Girona!"],
+                9: ["😎 Gairebé perfecte! Quasi gaèlic master","🎯 Excel·lent! Només una petita fallada"],
+                8: ["👏 Molt bé! Tens bones coneixences","✨ Fantàstic! Podriem fitxar-te!"],
+                7: ["💪 Bona puntuació! Vas per bon camí","🌱 Vas millorant! Segon intent millor?"],
+                6: ["🤔 No està malament, però pots fer més","📚 Potser necessites una mica més d'estudi"],
+                5: ["😅 La meitat no està malament!","💭 Bé, almenys la meitat correctes!"],
+                4: ["🤨 Potser el futbol gaèlic no és per a tu?","📖 Et recomanem llegir les regles d'altres vegades"],
+                3: ["😬 Hm... necessites ajuda","🙈 Mejor seria jugar que responder preguntas"],
+                2: ["😅 Dos punts? Vaja, vaja...","😳 Crec que has de practicar més!"],
+                1: ["🤔 Només un punt? No és fàcil, veritat?","😅 Potser va millor la pràctica que la teoria!"],
+                0: ["😬 Zero punts! Totalment a cegues, eh?","🤷 Bé, almenys ho has intentat!"]
+            };
+            return comments[score][Math.floor(Math.random() * comments[score].length)];
+        }
+        function finish(){document.getElementById("question").innerText="Quiz acabat!";document.getElementById("answers").innerHTML="";document.getElementById("result").innerHTML = `<div style='text-align:center;margin:30px 0;'><div style='font-size:26px;color:#fff;font-weight:bold;text-shadow:0 2px 12px #145a32;line-height:1.6;'>${player} ha fet ${score}/10 punts ${medal()}</div><div style='font-size:16px;color:#ffd700;margin-top:15px;font-style:italic;'>${getFunnyComment()}</div></div>`;
         endTime=Date.now();
         saveScore();
         loadRanking();
