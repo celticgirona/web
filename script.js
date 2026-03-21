@@ -8,8 +8,10 @@ hamburger.addEventListener('click', () => {
 
 // Tancar menú quan es fa clic en un link
 document.querySelectorAll('.nav-list a').forEach(link => {
-    link.addEventListener('click', () => {
-        navList.classList.remove('active');
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const section = this.getAttribute('href').substring(1);
+        navigateTo(section);
     });
 });
 
@@ -39,6 +41,12 @@ function filterArticles(category, event) {
 function navigateTo(section) {
     const element = document.getElementById(section);
     if (element) {
+        // Tancar menú si està obert
+        const navList = document.getElementById('navList');
+        if (navList) {
+            navList.classList.remove('active');
+        }
+        // Fer scroll a la secció
         element.scrollIntoView({ behavior: 'smooth' });
     }
 }
@@ -180,16 +188,19 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPdf('docs/futbol-gaelic.pdf');
 });
 
+// Manejador simplificado para evitar conflictos - solo para elementos que no esten en el menú
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href !== '#' && document.querySelector(href)) {
-            e.preventDefault();
-            document.querySelector(href).scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
-    });
+    // Saltar si ya está manejado por el menú
+    if (!anchor.closest('.nav-list')) {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href !== '#') {
+                e.preventDefault();
+                const section = href.substring(1);
+                navigateTo(section);
+            }
+        });
+    }
 });
 
 // Destacar secció activa en el menú
