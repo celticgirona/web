@@ -1,19 +1,34 @@
-// Menu Responsiu
-const hamburger = document.getElementById('hamburger');
-const navList = document.getElementById('navList');
+// Menu Responsiu - Executar quan el DOM está carregat
+function initializeMenu() {
+    const hamburger = document.getElementById('hamburger');
+    const navList = document.getElementById('navList');
+    
+    if (hamburger) {
+        hamburger.addEventListener('click', () => {
+            navList.classList.toggle('active');
+        });
+    }
+    
+    // Tancar menú quan es fa clic en qualsevol link
+    if (navList) {
+        navList.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('href').substring(1);
+                navigateTo(section);
+                // Tancar menú
+                navList.classList.remove('active');
+            });
+        });
+    }
+}
 
-hamburger.addEventListener('click', () => {
-    navList.classList.toggle('active');
-});
-
-// Tancar menú quan es fa clic en un link
-document.querySelectorAll('.nav-list a').forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const section = this.getAttribute('href').substring(1);
-        navigateTo(section);
-    });
-});
+// Executar quan el DOM esté llest
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeMenu);
+} else {
+    initializeMenu();
+}
 
 // Filtres de premsa
 function filterArticles(category, event) {
@@ -190,19 +205,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Manejador simplificado para evitar conflictos - solo para elementos que no esten en el menú
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    // Saltar si ya está manejado por el menú
-    if (!anchor.closest('.nav-list')) {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (href !== '#') {
-                e.preventDefault();
-                const section = href.substring(1);
-                navigateTo(section);
-            }
-        });
-    }
-});
+// Executar sempre dins de DOMContentLoaded para asegurar que els listeners del menú s'han registrat
+function initializeAnchorHandlers() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        // Saltar si ja está manejado per el menú
+        if (!anchor.closest('.nav-list')) {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const section = href.substring(1);
+                    navigateTo(section);
+                }
+            });
+        }
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAnchorHandlers);
+} else {
+    initializeAnchorHandlers();
+}
 
 // Destacar secció activa en el menú
 const sections = document.querySelectorAll('section[id]');
