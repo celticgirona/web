@@ -1,43 +1,46 @@
-// Menu Responsiu - Event delegation para evitar conflictos
-document.addEventListener('DOMContentLoaded', function() {
-    const hamburger = document.getElementById('hamburger');
+// Menu Responsiu - UN ÚNIC LISTENER GLOBAL
+document.addEventListener('click', function(e) {
     const navList = document.getElementById('navList');
     
-    // Toggle menú hamburger
-    if (hamburger) {
-        hamburger.addEventListener('click', function(e) {
-            e.stopPropagation();
-            navList.classList.toggle('active');
-        });
-    }
-    
-    // Event delegation para TODOS los links que empiezan con #
-    document.addEventListener('click', function(e) {
-        const link = e.target.closest('a[href^="#"]');
-        if (!link) return;
-        
+    // 1. Si clickejas el hamburger, toggle menú
+    if (e.target.closest('.hamburger')) {
         e.preventDefault();
         e.stopPropagation();
-        
+        navList.classList.toggle('active');
+        return;
+    }
+    
+    // 2. Si clickejas un link #, navegar
+    const link = e.target.closest('a[href^="#"]');
+    if (link) {
         const href = link.getAttribute('href');
         if (href && href !== '#') {
-            const section = href.substring(1);
-            navigateTo(section);
+            e.preventDefault();
+            const section_id = href.slice(1);
             
-            // Tancar menú si estava obert
-            if (navList) {
-                navList.classList.remove('active');
+            console.log('📍 Click en link:', href);
+            
+            const element = document.getElementById(section_id);
+            if (element) {
+                console.log('✅ Navegant a:', section_id);
+                element.scrollIntoView({ behavior: 'smooth' });
+                // Tancar menú
+                if (navList) {
+                    navList.classList.remove('active');
+                }
+            } else {
+                console.error('❌ Secció no trobada:', section_id);
             }
         }
-    });
+        return;
+    }
     
-    // Tancar menú en fer clic fora
-    document.addEventListener('click', function(e) {
-        if (navList && !e.target.closest('.nav') && navList.classList.contains('active')) {
-            navList.classList.remove('active');
-        }
-    });
-});
+    // 3. Si clickejas fora del menú, tancar-lo
+    if (navList && !e.target.closest('nav') && navList.classList.contains('active')) {
+        navList.classList.remove('active');
+    }
+}, false);
+
 
 // Filtres de premsa
 function filterArticles(category, event) {
@@ -63,15 +66,15 @@ function filterArticles(category, event) {
 
 // Navegació smoot amb scroll
 function navigateTo(section) {
+    console.log('🔍 navigateTo() - Buscant secció:', section);
+    
     const element = document.getElementById(section);
     if (element) {
-        // Tancar menú si està obert
-        const navList = document.getElementById('navList');
-        if (navList) {
-            navList.classList.remove('active');
-        }
-        // Fer scroll a la secció
+        console.log('✅ Secció trobada! Scrollant...');
         element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+        console.error('❌ SECCIÓ NO TROBADA:', section);
+        console.log('IDs disponibles al document:',Array.from(document.querySelectorAll('[id]')).map(el => el.id));
     }
     return false;
 }
