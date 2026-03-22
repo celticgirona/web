@@ -591,7 +591,7 @@
                 b.onclick=()=>answer(i);
                 answers.appendChild(b);
             });
-            document.getElementById("progress").style.width=(current/10*100)+"%";
+            document.getElementById("progress").style.width=((current+1)/10*100)+"%";
         }
         function answer(i){clearInterval(timer);let q=questions[current];let btns=document.querySelectorAll(".answer");btns.forEach((b,idx)=>{b.disabled=true;if(idx===q.c) b.style.outline="4px solid white";if(idx===i && idx!==q.c) b.style.opacity="0.4";});if(i===q.c) score++;document.getElementById("next").style.display="inline-block";}
         document.getElementById("next").onclick=()=>{current++;if(current<questions.length){loadQ();document.getElementById("next").style.display="none";}else finish();}
