@@ -601,13 +601,16 @@ function setLanguage(lang) {
     translateArticleTagDates(selectedLang);
     translateArticleTitles(selectedLang);
 
-    const toggleBtn = document.getElementById('languageToggle');
-    if (toggleBtn) {
-        const nextLang = selectedLang === 'en' ? 'CAT' : 'EN';
-        toggleBtn.textContent = selectedLang.toUpperCase();
-        toggleBtn.setAttribute('aria-label', selectedLang === 'en' ? 'Change language to Català' : 'Change language to English');
-        toggleBtn.dataset.nextLang = nextLang;
-    }
+    document.querySelectorAll('.lang-switcher .lang-toggle').forEach(btn => {
+        const btnLang = btn.dataset.lang;
+        if (btnLang === selectedLang) {
+            btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
+        } else {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-pressed', 'false');
+        }
+    });
 
     localStorage.setItem('celticgirona-lang', selectedLang);
 }
@@ -616,14 +619,12 @@ function initLanguage() {
     const savedLang = localStorage.getItem('celticgirona-lang');
     setLanguage(savedLang || 'ca');
 
-    const toggleBtn = document.getElementById('languageToggle');
-    if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            const currentLang = document.documentElement.lang === 'en' ? 'en' : 'ca';
-            const newLang = currentLang === 'en' ? 'ca' : 'en';
+    document.querySelectorAll('.lang-switcher .lang-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const newLang = btn.dataset.lang;
             setLanguage(newLang);
         });
-    }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', initLanguage);
